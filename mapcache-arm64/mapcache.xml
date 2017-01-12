@@ -1,0 +1,209 @@
+ 
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+ 
+ <mapcache>
+   <!--
+   *******************************************************
+   Set up caches here. Files, sqlite, mbtiles, etc..
+   *******************************************************
+   -->
+   <cache name="contours" type="sqlite3">
+     <dbfile>/var/cache/mapcache/contours.db</dbfile>
+   </cache>
+   <cache name="hypsorelief" type="sqlite3">
+     <dbfile>/var/cache/mapcache/hypsorelief.db</dbfile>
+   </cache>
+   <cache name="features" type="sqlite3">
+     <dbfile>/var/cache/mapcache/features.db</dbfile>
+   </cache>
+   <cache name="naip_2013" type="sqlite3">
+     <dbfile>/var/cache/mapcache/naip_2013.db</dbfile>
+   </cache>
+   <cache name="topo2_sqlite" type="sqlite3">
+     <dbfile>/var/cache/mapcache/maps_topo2.db</dbfile>
+   </cache>
+   
+   
+   
+   <!--
+   **********************************************************************
+   Set up sources here.
+   It is typically an external WMS service. Mapcache supports some
+   other source types like mapserver mapfiles.
+   **********************************************************************
+   -->
+   
+   <source name="naip_2013" type="wms">
+     <getmap>
+       <params>
+         <FORMAT>image/png</FORMAT>
+         <LAYERS>0</LAYERS>
+       </params>
+     </getmap>
+
+     <http>
+        <url>http://gisservicemt.gov:80/arcgis/services/MSDI_Framework/NAIP_2013/ImageServer/WMSServer</url>
+     </http>
+   </source>
+
+   <source name="features" type="wms">
+     <getmap>
+       <params>
+         <FORMAT>image/png</FORMAT>
+         <LAYERS>features</LAYERS>
+       </params>
+     </getmap>
+
+     <http>
+        <url>http://10.0.0.2:8000/?</url>
+     </http>
+   </source>
+
+   <source name="hypsorelief" type="wms">
+     <getmap>
+       <params>
+         <FORMAT>image/png</FORMAT>
+         <LAYERS>hypsorelief</LAYERS>
+       </params>
+     </getmap>
+
+     <http>
+        <url>http://10.0.0.2:8000/?</url>
+     </http>
+   </source>
+
+   
+   <source name="contours" type="wms">
+     <getmap>
+       <params>
+         <FORMAT>image/png</FORMAT>
+         <LAYERS>contours</LAYERS>
+       </params>
+     </getmap>
+
+     <http>
+        <url>http://10.0.0.2:8000/?</url>
+     </http>
+   </source>
+
+   
+   
+   
+   <!--
+   **********************************************************************
+   Set up grids here.
+   A grid defines map projection, tile size, extent and resolutions.
+   
+   Resolutions must match the resolutions for the OpenLayers client.
+   If using tiled cache services (e.g. Kartverket) as sources, we
+   must match their resolutions excactly as well
+   (see also mapconfig.js).
+   **********************************************************************
+   -->
+
+   <grid name="montana">
+     <metadata>
+       <title>State Plane Coordinate System for Montana, over Mineral County</title>
+     </metadata>
+
+     <srs>EPSG:32100</srs>
+     <size>256 256</size>
+     <extent>111848.62,17695.2,1030194.19,547983.68</extent>
+     <resolutions>256 128 64 32 16 8 4 2 1</resolutions>
+   </grid>
+
+   <grid name="utm32">
+     <metadata>
+       <title>UTM zone 32 for Norway. Matches Kartverket cache-service.</title>
+     </metadata>
+     
+     <srs>EPSG:32632</srs>
+     <size>256 256</size>
+     <extent> -2000000,3500000,3545984,9045984 </extent>
+     <resolutions>1354.0 677.0 338.5 169.25 84.625 42.3125 21.15625 10.5781248 5.2890624 2.6445312 1.3222656 0.6611328</resolutions>
+   </grid>
+   
+   
+   
+   <grid name="utm33">
+     <metadata>
+       <title>UTM zone 33 for Norway.  Matches Kartverket cache-service.</title>
+     </metadata>
+     
+     <srs>EPSG:32633</srs>
+     <size>256 256</size>
+     <extent> -2500000.0,3500000.0,3045984.0,9045984.0 </extent>
+     <resolutions>1354.0 677.0 338.5 169.25 84.625 42.3125 21.15625 10.5781248 5.2890624 2.6445312 1.3222656 0.6611328</resolutions>
+   </grid>
+   
+   
+   <!--
+   ********************************************************************
+    Set up tilesets here.
+    A tileset defines a source, a cache, a grid and a format as well
+    as a metatile size, and expire time. auto_expire is the numbers
+    of seconds before the server cache expire and will try to reload. 
+    0 means - never expire. 
+   ********************************************************************
+   -->
+   <tileset name="naip_2013">
+     <source>naip_2013</source>
+     <cache>naip_2013</cache>
+     <grid>montana</grid>
+     <format>mixed</format>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+   <tileset name="features">
+     <source>features</source>
+     <cache>features</cache>
+     <grid>montana</grid>
+     <format>mixed</format>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+   <tileset name="hypsorelief">
+     <source>hypsorelief</source>
+     <cache>hypsorelief</cache>
+     <grid>montana</grid>
+     <format>mixed</format>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+   <tileset name="contours">
+     <source>contours</source>
+     <cache>contours</cache>
+     <grid>montana</grid>
+     <format>mixed</format>
+     <metatile>1 1</metatile>
+     <metabuffer>0</metabuffer>
+     <auto_expire>0</auto_expire>
+   </tileset>
+
+   
+   <default_format>JPEG</default_format>
+   
+   <service type="wms" enabled="true">
+     <full_wms>assemble</full_wms>
+     <resample_mode>bilinear</resample_mode>
+     <format>PNG</format>
+     <maxsize>4096</maxsize>
+   </service>
+   
+   <service type="wmts" enabled="true"/>
+   <service type="tms" enabled="true"/>
+   
+   <errors>report</errors>
+   <lock_dir>/tmp</lock_dir>
+   
+ </mapcache>
+ 
+ 
+   
