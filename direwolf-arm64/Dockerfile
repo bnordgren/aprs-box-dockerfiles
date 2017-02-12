@@ -13,10 +13,9 @@ RUN wget -O /tmp/1.3.tar.gz https://github.com/wb2osz/direwolf/archive/1.3.tar.g
  && make install \
  && make install-conf \
  && apt-get remove -y build-essential libasound2-dev libgps-dev \
- && apt-get autoremove -y \
+# && apt-get autoremove -y \
  && rm -rf /tmp/direwolf-1.3 /tmp/1.3.tar.gz
 
-# fix discrepancy between ArchLinux audio group number (host) and debian (container)
-RUN sed -i 's/:29:/:92:/' /etc/group
 
 EXPOSE 8000 8001
+
