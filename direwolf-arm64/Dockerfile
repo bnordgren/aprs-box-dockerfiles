@@ -2,7 +2,7 @@ FROM aarch64/debian:jessie
 MAINTAINER Bryce Nordgren <bnordgren@gmail.com>
 
 RUN apt-get update \
- && apt-get install -y wget alsa-utils build-essential libasound2-dev libgps-dev \
+ && apt-get install -y wget alsa-utils build-essential libasound2-dev libgps-dev libgps21 libasound2 nano sudo \
  && rm -rf /var/lib/apt/lists/*
 
 RUN wget -O /tmp/1.3.tar.gz https://github.com/wb2osz/direwolf/archive/1.3.tar.gz \
@@ -13,9 +13,11 @@ RUN wget -O /tmp/1.3.tar.gz https://github.com/wb2osz/direwolf/archive/1.3.tar.g
  && make install \
  && make install-conf \
  && apt-get remove -y build-essential libasound2-dev libgps-dev \
-# && apt-get autoremove -y \
+ && apt-get autoremove -y \
  && rm -rf /tmp/direwolf-1.3 /tmp/1.3.tar.gz
 
+COPY direwolf.conf /root
 
+ENTRYPOINT [ "/usr/local/bin/direwolf", "-c", "/root/direwolf.conf" ]
 EXPOSE 8000 8001
 
