@@ -8,19 +8,22 @@
    Set up caches here. Files, sqlite, mbtiles, etc..
    *******************************************************
    -->
+   <cache name="contours" type="sqlite3">
+     <dbfile>/var/cache/mapcache/contours.db</dbfile>
+   </cache>
+   <cache name="hypsorelief" type="sqlite3">
+     <dbfile>/var/cache/mapcache/hypsorelief.db</dbfile>
+   </cache>
    <cache name="features" type="sqlite3">
-     <dbfile>/var/lib/polaric/mapcache/features.db</dbfile>
+     <dbfile>/var/cache/mapcache/features.db</dbfile>
    </cache>
    <cache name="naip_2013" type="sqlite3">
-     <dbfile>/var/lib/polaric/mapcache/naip_2013.db</dbfile>
+     <dbfile>/var/cache/mapcache/naip_2013.db</dbfile>
    </cache>
    <cache name="topo2_sqlite" type="sqlite3">
-     <dbfile>/var/lib/polaric/mapcache/maps_topo2.db</dbfile>
+     <dbfile>/var/cache/mapcache/maps_topo2.db</dbfile>
    </cache>
    
-   <cache name="grunnkart_sqlite" type="sqlite3">
-     <dbfile>/var/lib/polaric/mapcache/maps_grunnkart.db</dbfile>
-   </cache>
    
    
    <!--
@@ -57,50 +60,33 @@
      </http>
    </source>
 
-   <!-- This uses a tiled cache service. Use with metatile 1x1. -->
-   <source name="kv_topo2cache" type="wms">
+   <source name="hypsorelief" type="wms">
      <getmap>
        <params>
          <FORMAT>image/png</FORMAT>
-         <LAYERS>topo2</LAYERS>
+         <LAYERS>hypsorelief</LAYERS>
        </params>
      </getmap>
-     
+
      <http>
-       <!-- Opencache.statkart.no -->
-       <url>http://opencache.statkart.no/gatekeeper/gk/gk.open?</url>
+        <url>http://10.0.0.2:8000/?</url>
      </http>
    </source>
+
    
-   <!-- This uses a tiled cache service. Use with metatile 1x1. -->
-   <source name="kv_grunnkart" type="wms">
+   <source name="contours" type="wms">
      <getmap>
        <params>
          <FORMAT>image/png</FORMAT>
-         <LAYERS>norges_grunnkart</LAYERS>
+         <LAYERS>contours</LAYERS>
        </params>
      </getmap>
-     
+
      <http>
-       <url>http://opencache.statkart.no/gatekeeper/gk/gk.open?</url>
+        <url>http://10.0.0.2:8000/?</url>
      </http>
    </source>
-   
-   
-   <!-- This uses a WMS service. Use it with metatile 5x5 (for example) -->
-   <source name="kv_topo2" type="wms">
-     <getmap>
-       <params>
-         <FORMAT>image/png</FORMAT>
-         <LAYERS>topo2_WMS</LAYERS>
-       </params>
-     </getmap>
-     
-     <http>
-       <!-- openwms.statkart.no -->
-       <url>http://openwms.statkart.no/skwms1/wms.topo2</url>
-     </http>
-   </source>
+
    
    
    
@@ -181,32 +167,26 @@
      <auto_expire>0</auto_expire>
    </tileset>
 
-   <tileset name="kv_topo2cache">
-     <source>kv_topo2cache</source>
-     <cache>topo2_sqlite</cache>
-     <grid>utm33</grid>
+   <tileset name="hypsorelief">
+     <source>hypsorelief</source>
+     <cache>hypsorelief</cache>
+     <grid>montana</grid>
      <format>mixed</format>
-     
      <metatile>1 1</metatile>
      <metabuffer>0</metabuffer>
-     <expires>604800</expires>
-     <auto_expire>5184000</auto_expire>
+     <auto_expire>0</auto_expire>
    </tileset>
-   
-   
-   <tileset name="kv_grunnkart">
-     <source>kv_grunnkart</source>
-     <cache>grunnkart_sqlite</cache>
-     <grid>utm33</grid>
+
+   <tileset name="contours">
+     <source>contours</source>
+     <cache>contours</cache>
+     <grid>montana</grid>
      <format>mixed</format>
-     
      <metatile>1 1</metatile>
      <metabuffer>0</metabuffer>
-     <expires>604800</expires>
-     <auto_expire>5184000</auto_expire>
+     <auto_expire>0</auto_expire>
    </tileset>
-   
-   
+
    
    <default_format>JPEG</default_format>
    
