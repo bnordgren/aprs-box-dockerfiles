@@ -1,10 +1,29 @@
-FROM aarch64/debian:jessie
+# TODO: You need to uncomment one (and only one) of the 
+# FROM lines, depending on the processor in the machine 
+# you're using for your aprs-box server. 
+# You have       You want
+# ==========     =========
+# 64-bit ARM     aarch64/debian:jessie
+# (ODROID C2...) 
+#
+# ARM hf         resin/rpi-raspbian
+# (RPI machines,
+#  others
+#
+# 64-bit intel   debian:jessie
+# (PCs, laptops,
+# etc.)
+#
+#FROM aarch64/debian:jessie
+#FROM resin/rpi-raspbian
+#FROM debian:jessie
+
 MAINTAINER Bryce Nordgren <bnordgren@gmail.com>
 
-# Set the user's callsign
-# User must set something here.
+# TODO: Set your callsign
+# User must set something here. Uncomment and fill in your info.
 # e.g. "ENV CALLSIGN AF7RQ"
-ENV CALLSIGN AF7RQ
+#ENV CALLSIGN YOURCALL
 
 # Add the polaric repo and jessie-backports
 RUN echo "deb http://aprs.no/debian-rep binary-dev/" > /etc/apt/sources.list.d/polaric.list \
@@ -28,4 +47,5 @@ COPY polaric-aprsd /etc/init.d/
 COPY aprsd-server.ini /etc/polaric-aprsd/server.ini
 
 EXPOSE 80 8081
+VOLUME /var/cache/mapcache
 CMD [ "/usr/local/bin/polaric-startup.sh" ]

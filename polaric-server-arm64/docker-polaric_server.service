@@ -1,0 +1,13 @@
+[Unit]
+Description=Polaric server container
+Requires=docker.service
+After=docker.service
+After=docker-direwolf.service
+
+[Service]
+Restart=always
+ExecStart=/usr/local/bin/start-polaric-server.sh
+ExecStop=/usr/bin/docker stop -t 10 polaric
+
+[Install]
+WantedBy=default.target

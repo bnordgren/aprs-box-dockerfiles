@@ -113,11 +113,11 @@ LAYERS (true, TRUE, [
 LAYERS(true, TRUE, [
       /* NAIP 2013 Raster. Cached locally */
       new OpenLayers.Layer.TMS(
-         "Aerial Imagery", "http://10.0.0.4/mapcache/tms/",
+         "Aerial Imagery", "http://%MY_IP%/mapcache/tms/",
          { layername : 'naip_2013', type: 'png' }
       ),
       new OpenLayers.Layer.TMS(
-         "Shaded Relief", "http://10.0.0.4/mapcache/tms/",
+         "Shaded Relief", "http://%MY_IP%/mapcache/tms/",
          { layername : "hypsorelief", type: 'png' }
       )
 ]);
@@ -125,11 +125,11 @@ LAYERS(true, TRUE, [
 /* Overlay layers */
 LAYERS(false, TRUE, [
       new OpenLayers.Layer.TMS(
-         "Features", "http://10.0.0.4/mapcache/tms/",
+         "Features", "http://%MY_IP%/mapcache/tms/",
          { layername: "features", type: "png" }
       ),
       new OpenLayers.Layer.TMS(
-         "Contours", "http://10.0.0.4/mapcache/tms/",
+         "Contours", "http://%MY_IP%/mapcache/tms/",
          { layername: "contours", type: "png" }
       )
 ]);
