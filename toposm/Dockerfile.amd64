@@ -1,0 +1,38 @@
+FROM ubuntu:16.04
+MAINTAINER Bryce Nordgren <bnordgren@gmail.com>
+
+# Need multiverse for mscorefonts
+RUN apt-get update && \
+    apt-get install -y software-properties-common && \
+    apt-add-repository "deb http://us.archive.ubuntu.com/ubuntu/ xenial multiverse" && \
+    apt-add-repository "deb http://us.archive.ubuntu.com/ubuntu/ xenial-updates multiverse" && \
+    apt-get update
+
+# Processing requirements for TopOSM
+RUN apt-get install -y debconf-utils && \
+    echo ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula boolean true | debconf-set-selections && \
+    apt-get install -y python-mapnik mapnik-utils gdal-bin gdal-contrib python-gdal \
+       libgdal-dev proj-bin proj-data libproj-dev python-pyproj python-numpy imagemagick \
+       gcc g++ optipng git postgresql postgresql-contrib \
+       postgresql-server-dev-all postgis wget libxml2-dev python-libxml2 \
+       libgeos-dev libbz2-dev make htop python-cairo python-cairo-dev \
+       osm2pgsql unzip python-pypdf libboost-all-dev libicu-dev libpng-dev \
+       libjpeg-dev libtiff-dev libz-dev libfreetype6-dev libxml2-dev \
+       libproj-dev libcairo-dev libcairomm-1.0-dev python-cairo-dev \
+       libpq-dev libgdal-dev libsqlite3-dev libcurl4-gnutls-dev \
+       libsigc++-2.0-dev fonts-sil-gentium ttf-mscorefonts-installer \
+       "ttf-adf-*" vim python-xattr python-lockfile python-pillow \
+       python-pastescript python-webob \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a user to do all the work, check out the 
+# current TopOSM code, and check out the Mapnik WMS
+# server.
+RUN useradd -g users -m -N -u 1000 toposm && \
+    ( cd ~toposm ; git clone https://github.com/bnordgren/TopOSM.git ) && \
+    ( cd ~toposm ; git clone https://github.com/bnordgren/OGCServer.git ; cd OGCServer ; python setup.py install) && \
+    chown -R toposm.users ~toposm/TopOSM ~toposm/OGCServer
+
+EXPOSE 8000
+VOLUME ["/var/local/source","/var/local/rendered"]
+CMD ["/bin/bash"]
